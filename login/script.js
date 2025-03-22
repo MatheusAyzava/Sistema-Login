@@ -1,16 +1,36 @@
-document.getElementById('loginForm').addEventListener('submit', function(event) {
+// LOGIN
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
     event.preventDefault();
-
-    // Obtendo os valores dos campos
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // Condição de exemplo para validar os dados
-    if (username === 'admin' && password === '12345') {
-        // Redireciona para a página de Landing Page com o nome do usuário
-        window.location.href = 'http://127.0.0.1:5500/interno/landing.html?${username}';
+    const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+        window.location.href = `landing.html?user=${username}`;
     } else {
-        document.getElementById('error-message').textContent = 'Usuário ou senha inválidos.';
+        document.getElementById('error-message').textContent = data.message;
     }
 });
 
+// CADASTRO
+document.getElementById('registerForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const newUsername = document.getElementById('newUsername').value;
+    const newPassword = document.getElementById('newPassword').value;
+
+    const response = await fetch('http://localhost:3000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: newUsername, password: newPassword })
+    });
+
+    const data = await response.json();
+    document.getElementById('register-message').textContent = data.message;
+});

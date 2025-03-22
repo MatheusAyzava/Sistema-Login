@@ -5,24 +5,21 @@ const cors = require('cors');
 const app = express();
 const port = 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Banco de dados SQLite
 const db = new sqlite3.Database('./users.db', (err) => {
     if (err) return console.error(err.message);
     console.log('Conectado ao banco SQLite.');
 });
 
-// Criar tabela se não existir
 db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
     password TEXT
 )`);
 
-// Rota de cadastro
+// Cadastro
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
     db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, password], function(err) {
@@ -33,7 +30,7 @@ app.post('/register', (req, res) => {
     });
 });
 
-// Rota de login
+// Login
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     db.get(`SELECT * FROM users WHERE username = ? AND password = ?`, [username, password], (err, row) => {
@@ -48,8 +45,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-// Iniciar servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
- 
