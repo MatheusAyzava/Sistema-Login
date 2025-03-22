@@ -1,0 +1,97 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: url('../beta.jpg') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.9); /* Aumentei a opacidade do fundo para 0.9 */
+    backdrop-filter: blur(8px); /* Efeito de desfoque no fundo */
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Ajustei a borda para maior contraste */
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333333; /* Alterei a cor do título para escuro */
+    margin-bottom: 20px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    color: #333333; /* Alterei a cor das labels para escuro */
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    background: rgb(243 240 240); /* Aumentei a opacidade do fundo dos inputs */
+    color: #333333; /* Cor do texto mais forte */
+    transition: 0.3s;
+}
+
+input::placeholder {
+    color: rgba(0, 0, 0, 0.6); /* Placeholder com uma cor mais escura */
+}
+
+input:focus {
+    background: rgba(255, 255, 255, 0.801); /* Foco sem transparência */
+    border: 1px solid #4CAF50; /* Cor da borda ao focar */
+}
+
+button {
+   width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #1b2139, #cfd1d8);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #2E8B57, #4CAF50);
+    transform: scale(1.05);
+}
+
+.error-message {
+    color: #ff4d4d;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+@media (max-width: 400px) {
+    .login-container {
+        width: 90%;
+    }
+}
