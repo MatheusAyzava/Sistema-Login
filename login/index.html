@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login e Cadastro</title>
+    <title>Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,19 +24,8 @@
 
         <hr style="margin: 20px 0;">
 
-        <h2>Cadastro</h2>
-        <form id="registerForm">
-            <div class="input-group">
-                <label for="newUsername">Novo Usuário:</label>
-                <input type="text" id="newUsername" name="newUsername" required>
-            </div>
-            <div class="input-group">
-                <label for="newPassword">Nova Senha:</label>
-                <input type="password" id="newPassword" name="newPassword" required>
-            </div>
-            <button type="submit">Cadastrar</button>
-        </form>
-        <p id="register-message" class="error-message"></p>
+        <!-- Botão que leva para página de cadastro -->
+        <button onclick="window.location.href='cadastro.html'">Ir para Cadastro</button>
     </div>
 
     <script src="script.js"></script>

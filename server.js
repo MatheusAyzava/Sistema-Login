@@ -1,30 +1,57 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const mysql = require('mysql2');
 const cors = require('cors');
+const dotenv = require('dotenv');
+const path = require('path');
+
+// Carrega as variáveis do .env
+dotenv.config({ path: path.resolve(__dirname, 'env/.env') });
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
 
-const db = new sqlite3.Database('./users.db', (err) => {
-    if (err) return console.error(err.message);
-    console.log('Conectado ao banco SQLite.');
+// Conexão com MySQL usando .env
+const db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
-db.run(`CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT
-)`);
+// Testa conexão
+db.connect((err) => {
+    if (err) {
+        console.error('Erro ao conectar ao MySQL:', err.message);
+        return;
+    }
+    console.log('Conectado ao MySQL com sucesso.');
+});
+
+// Cria a tabela se não existir
+db.query(`
+    CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL
+    )
+`, (err, result) => {
+    if (err) console.error('Erro ao criar tabela:', err.message);
+});
 
 // Cadastro
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
-    db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, password], function(err) {
+    const query = `INSERT INTO users (username, password) VALUES (?, ?)`;
+    db.query(query, [username, password], (err, result) => {
         if (err) {
-            return res.json({ success: false, message: 'Usuário já existe.' });
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.json({ success: false, message: 'Usuário já existe.' });
+            }
+            return res.json({ success: false, message: 'Erro ao cadastrar.' });
         }
         res.json({ success: true, message: 'Usuário cadastrado com sucesso!' });
     });
@@ -33,18 +60,20 @@ app.post('/register', (req, res) => {
 // Login
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    db.get(`SELECT * FROM users WHERE username = ? AND password = ?`, [username, password], (err, row) => {
+    const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
+    db.query(query, [username, password], (err, results) => {
         if (err) {
             return res.json({ success: false, message: 'Erro no servidor.' });
         }
-        if (row) {
+        if (results.length > 0) {
             res.json({ success: true, message: 'Login bem-sucedido.' });
         } else {
             res.json({ success: false, message: 'Usuário ou senha inválidos.' });
         }
-    })//dsla
+    });
 });
 
+// Inicia servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
