@@ -6,7 +6,6 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: url('../beta.jpg') no-repeat center center/cover;
     height: 100vh;
     display: flex;
     justify-content: center;

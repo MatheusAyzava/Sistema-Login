@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 // Carrega as variáveis do .env
-dotenv.config({ path: path.resolve(__dirname, 'env/.env') });
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -56,6 +56,7 @@ app.post('/register', (req, res) => {
         res.json({ success: true, message: 'Usuário cadastrado com sucesso!' });
     });
 });
+
 
 // Login
 app.post('/login', (req, res) => {
