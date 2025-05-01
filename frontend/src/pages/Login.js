@@ -17,7 +17,7 @@ function Login() {
     document.body.style.height = '100vh';
     document.body.style.margin = 0;
     document.body.style.display = 'flex';
-    document.body.style.justifyContent = 'center';
+    document.body.style.justifyContent = 'center';;;
     document.body.style.alignItems = 'center';
 
     return () => {
@@ -25,12 +25,12 @@ function Login() {
       document.body.removeAttribute('style');
     };
   }, []);
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3001/login", {
+      const response = await fetch("http://localhost:3000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

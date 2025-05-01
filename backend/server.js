@@ -8,7 +8,7 @@ const path = require('path');
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -42,15 +42,26 @@ db.query(`
     if (err) console.error('Erro ao criar tabela:', err.message);
 });
 
-// Cadastro
+// Cadastro+
+console.log('Criando tabela de usuários...');
+app.get('/', (req, res) => {
+    res.send('API de autenticação com MySQL e Express');
+});
+
 app.post('/register', (req, res) => {
-    const { username, password } = req.body;
+    const { username, password } = req.body
+    console.log('Dados recebidos:', req.body);
+    if (!username || !password) {
+        return res.json({ success: false, message: 'Usuário e senha são obrigatórios.' });
+    }
     const query = `INSERT INTO users (username, password) VALUES (?, ?)`;
     db.query(query, [username, password], (err, result) => {
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
                 return res.json({ success: false, message: 'Usuário já existe.' });
             }
+            console.error('Erro ao cadastrar usuário:', err.message);
+            console.log('Erro ao cadastrar usuário:', err);
             return res.json({ success: false, message: 'Erro ao cadastrar.' });
         }
         res.json({ success: true, message: 'Usuário cadastrado com sucesso!' });
